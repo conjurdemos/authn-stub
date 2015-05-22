@@ -2,13 +2,25 @@
 
 A stubbed Conjur authenticator which accepts any login and password, and returns a signed auth token.
 
-# Build
+It requires the file `service.pem` to be the [Slosilo](https://github.com/conjurinc/slosilo) private key (a standard PEM file). An insecure key is provided in this repo, `insecure-key/authn-stub.pem`.
+
+# Run with Ruby
+
+```
+$ bundle install
+$ ln -s insecure-key/authn-stub.pem service.pem
+$ bundle exec rackup
+```
+
+# Run with Docker
+
+## Build
 
 ```
 $ docker build -t authn-stub .
 ```
 
-# Run
+## Run
 
 ```
 $ docker run -d \
@@ -20,8 +32,10 @@ $ docker run -d \
 
 # Test
 
+A `curl` request to the service will authenticate any user with any password.
+
 ```
-$ curl -X POST http://$(boot2docker ip):9292/users/alice/authenticate --data "the-password"
+$ curl -X POST http://localhost:9292/users/alice/authenticate --data "the-password"
 {
   "data": "alice",
   "timestamp": "2015-05-22 17:47:52 UTC",
